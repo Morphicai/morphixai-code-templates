@@ -2,7 +2,7 @@
 node_modules/
 /.pnp
 .pnp.js
-
+_dev/app-files.js
 # Production builds
 /dist
 /build
