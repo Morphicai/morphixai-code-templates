@@ -20,7 +20,7 @@
   "author": "MorphixAI Developer",
   "license": "MIT",
   "devDependencies": {
-    "@morphixai/code": "^1.1.6"
+    "@morphixai/code": "^1.1.8"
   },
   "morphixai": {
     "version": "1.0.0",
