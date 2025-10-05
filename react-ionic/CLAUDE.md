@@ -20,6 +20,24 @@
 - ✅ **允许**：在应用根目录及其子目录下创建、修改任何文件
 - ❌ **严禁**：修改项目配置文件（package.json, vite.config.js 等）
 - ❌ **严禁**：修改 `docs/` 和 `public/` 目录
+- ❌ **严禁**：安装新的 npm 包（禁止运行 `npm install xxx`）
+
+## 依赖管理
+
+**重要：项目禁止安装新的 npm 包！**
+
+如需引入新的第三方库，必须使用 `remoteImport` 函数：
+
+```jsx
+// ✅ 正确做法
+const _ = await remoteImport('lodash-es');
+const { v4: uuidv4 } = await remoteImport('uuid');
+
+// ❌ 错误做法
+// npm install lodash-es  -- 禁止
+```
+
+详见 [docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)
 
 ## 快速要点
 

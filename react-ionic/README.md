@@ -37,6 +37,27 @@
 - ✅ **允许**：在 `src/` 目录下创建、修改任何文件
 - ❌ **严禁**：修改项目配置文件（package.json, vite.config.js 等）
 - ❌ **严禁**：修改 `_dev/` 和 `docs/` 目录
+- ❌ **严禁**：安装新的 npm 包（禁止运行 `npm install xxx`）
+
+### 依赖管理规则
+
+**重要：项目禁止安装新的 npm 包！**
+
+如需引入新的第三方库，请使用 `remoteImport` 函数从 CDN 动态导入：
+
+```jsx
+// 使用 remoteImport 导入外部库
+const _ = await remoteImport('lodash-es');
+const { v4: uuidv4 } = await remoteImport('uuid');
+const moment = await remoteImport('moment');
+
+// remoteImport 应放在常规 import 语句之后
+// 支持从 CDN 源动态加载：
+// ESM: cdn.skypack.dev, esm.sh, cdn.jsdelivr.net
+// UMD: cdn.jsdelivr.net, unpkg.com
+```
+
+详细的依赖管理规范请查看 [docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)
 
 ### 核心技术
 

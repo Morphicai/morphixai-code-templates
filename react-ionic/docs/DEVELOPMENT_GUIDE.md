@@ -11,6 +11,32 @@
 - ❌ **严禁**：修改应用目录外的任何文件
 - ❌ **严禁**：修改项目配置文件（package.json, vite.config.js 等）
 - ❌ **严禁**：修改 `_dev/` 目录内容（这是 CLI 的内部目录）
+- ❌ **严禁**：安装新的 npm 包（禁止运行 `npm install xxx` 命令）
+
+### 📦 依赖管理规则
+
+**重要：项目禁止安装新的 npm 包！**
+
+原因：
+- 保证项目配置的稳定性和一致性
+- 避免不必要的依赖冲突
+- 确保应用体积最小化
+- 维持项目构建的可靠性
+
+**解决方案：使用 remoteImport 动态导入**
+
+如需引入新的第三方库，必须使用 `remoteImport` 函数从 CDN 动态加载：
+
+```jsx
+// ✅ 正确：使用 remoteImport 导入
+const _ = await remoteImport('lodash-es');
+const { v4: uuidv4 } = await remoteImport('uuid');
+const moment = await remoteImport('moment');
+
+// ❌ 错误：不要安装 npm 包
+// npm install lodash-es  -- 禁止
+// npm install uuid       -- 禁止
+```
 
 ## 🎯 技术栈规范
 
@@ -55,16 +81,60 @@ import styles from './styles/ComponentName.module.css';
 ```
 
 ### remoteImport 远程模块导入
+
+**remoteImport 是项目中引入第三方库的唯一方式！**
+
 ```jsx
 // 远程导入库 - 支持顶级 await
 const _ = await remoteImport('lodash-es');
 const { v4: uuidv4 } = await remoteImport('uuid');
 const moment = await remoteImport('moment');
+const axios = await remoteImport('axios');
+const chartjs = await remoteImport('chart.js');
 
 // remoteImport 应放在常规 import 语句之后
-// 支持从 CDN 源动态加载：ESM: cdn.skypack.dev, esm.sh, cdn.jsdelivr.net
-// UMD: cdn.jsdelivr.net, unpkg.com
+// 支持从 CDN 源动态加载：
+//   ESM 格式: cdn.skypack.dev, esm.sh, cdn.jsdelivr.net
+//   UMD 格式: cdn.jsdelivr.net, unpkg.com
 ```
+
+**remoteImport 使用指南：**
+
+```jsx
+// 1. 基础用法 - 导入整个库
+const lodash = await remoteImport('lodash-es');
+lodash.debounce(() => {}, 300);
+
+// 2. 解构导入 - 导入特定函数/对象
+const { debounce, throttle } = await remoteImport('lodash-es');
+debounce(() => {}, 300);
+
+// 3. 导入并重命名
+const { v4: uuidv4, v1: uuidv1 } = await remoteImport('uuid');
+const id = uuidv4();
+
+// 4. 在组件或函数顶部使用
+export default function MyComponent() {
+  // 注意：remoteImport 使用 await，需要在异步上下文中
+  // 建议在 useEffect 或事件处理函数中使用
+  useEffect(() => {
+    (async () => {
+      const chart = await remoteImport('chart.js');
+      // 使用 chart
+    })();
+  }, []);
+}
+```
+
+**常用的可远程导入库：**
+- `lodash-es` - 工具函数库
+- `uuid` - UUID 生成
+- `moment` 或 `date-fns` - 日期处理（注：项目已内置 dayjs）
+- `axios` - HTTP 客户端
+- `chart.js` - 图表库
+- `qrcode` - 二维码生成
+- `html2canvas` - HTML 截图
+- `markdown-it` - Markdown 解析
 
 ### 标准组件结构
 ```jsx
@@ -1303,17 +1373,18 @@ const result = await withRetry(
 
 ## ⚠️ 重要禁止事项
 
-1. **禁止全局错误边界** - 请不要添加全局的错误边界
-2. **禁止演示代码** - 生成生产可用的代码，不要添加开发或演示代码
-3. **禁止修改配置** - 不要修改 package.json, vite.config.js 等配置文件
-4. **禁止在应用目录外操作** - 严格限制在允许的开发区域内（_dev/, docs/, public/ 除外）
-5. **禁止使用过时的路由语法** - 必须使用 React Router v5.3.4 语法
-6. **禁止跳过错误处理** - 所有 AppSdk 调用必须使用 try-catch 和 reportError
+1. **禁止安装 npm 包** - 严禁运行 `npm install` 添加新依赖，必须使用 remoteImport
+2. **禁止全局错误边界** - 请不要添加全局的错误边界
+3. **禁止演示代码** - 生成生产可用的代码，不要添加开发或演示代码
+4. **禁止修改配置** - 不要修改 package.json, vite.config.js 等配置文件
+5. **禁止在应用目录外操作** - 严格限制在允许的开发区域内（_dev/, docs/, public/ 除外）
+6. **禁止使用过时的路由语法** - 必须使用 React Router v5.3.4 语法
+7. **禁止跳过错误处理** - 所有 AppSdk 调用必须使用 try-catch 和 reportError
 
 ## 🎯 编码原则总结
 
 1. **入口文件**：使用 `app.jsx` 作为应用入口
-2. **依赖管理**：优先使用内置库，必要时使用 remoteImport
+2. **依赖管理**：禁止安装 npm 包，优先使用内置库，必要时使用 remoteImport 动态导入
 3. **样式优先级**：CSS Modules > 全局样式
 4. **AppSdk 优先**：优先使用 AppSdk 进行数据存储和原生能力调用
 5. **错误上报**：在所有 try-catch 中使用 `reportError`
