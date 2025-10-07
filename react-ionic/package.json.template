@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "morphixai dev",
     "build": "morphixai build",
+    "restore": "morphixai restore",
     "prompts:check": "morphixai prompts check",
     "prompts:update": "morphixai prompts update"
   },
@@ -20,7 +21,7 @@
   "author": "MorphixAI Developer",
   "license": "MIT",
   "devDependencies": {
-    "@morphixai/code": "^1.1.8"
+    "@morphixai/code": "^1.1.10"
   },
   "morphixai": {
     "version": "1.0.0",
