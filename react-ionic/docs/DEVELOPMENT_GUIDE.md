@@ -111,10 +111,10 @@ import { reportError } from '@morphixai/lib';
 // 常用图标列表
 import { 
   home, search, settings, person, notifications, mail, heart, star, add, close,
-  menu, checkmark, camera, image, calendar, time, location, phone, call, videocam,
-  share, download, upload, copy, trash, edit, save, folder, document, lockClosed,
-  eye, thumbsUp, thumbsDown, refresh, sync, cloud, wifi, bluetooth, battery,
-  volume, play, pause, stop, cart, bag, card, cash, gift, rocket, globe
+  menu, checkmark, camera, image, calendar, time, location, call, videocam,
+  share, download, cloudUpload, copy, trash, create, save, folder, document, lockClosed,
+  eye, thumbsUp, thumbsDown, refresh, sync, cloud, wifi, bluetooth, batteryFull,
+  volumeHigh, play, pause, stop, cart, bag, card, cash, gift, rocket, globe
 } from 'ionicons/icons';
 ```
 
