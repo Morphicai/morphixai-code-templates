@@ -1,68 +1,45 @@
-# MorphixAI 应用开发规范 - Claude Code
+# MorphixAI 应用开发指南
 
-## 📖 重要提示
+## 📖 完整开发文档
 
-**在开始开发前，请务必完整阅读完整开发指南：**
+**在开始开发前，请务必完整阅读开发指南：**
 
 👉 **[docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)**
 
-该文档包含：
-- 🎯 完整技术栈说明（React 19、Ionic React 8.6、React Router 5.3.4 等）
-- 🚀 MorphixAI SDK 完整使用指南（相机、位置、AI、数据存储等）
-- 🎨 UI/UX 规范（图标、Tab 导航、PageHeader 等）
-- 📚 最佳实践模式（服务层、Hook 模式、状态管理等）
-- ⚠️ 错误处理规范
+该文档包含完整的技术栈说明、SDK 使用指南、UI/UX 规范和最佳实践。
 
-## 核心约束
+## 🎯 项目结构
 
-**所有开发活动必须严格限制在应用根目录内！**
-
-- ✅ **允许**：在应用根目录及其子目录下创建、修改任何文件
-- ❌ **严禁**：修改项目配置文件（package.json, vite.config.js 等）
-- ❌ **严禁**：修改 `docs/` 和 `public/` 目录
-- ❌ **严禁**：安装新的 npm 包（禁止运行 `npm install xxx`）
-
-## 依赖管理
-
-**重要：项目禁止安装新的 npm 包！**
-
-如需引入新的第三方库，必须使用 `remoteImport` 函数：
-
-```jsx
-// ✅ 正确做法
-const _ = await remoteImport('lodash-es');
-const { v4: uuidv4 } = await remoteImport('uuid');
-
-// ❌ 错误做法
-// npm install lodash-es  -- 禁止
+```
+项目根目录/
+├── src/                # 源代码目录
+│   ├── app.jsx        # 应用入口文件（必需）
+│   ├── components/    # 组件目录
+│   ├── styles/        # 样式目录（CSS Modules）
+│   ├── services/      # 服务层（可创建）
+│   ├── hooks/         # 自定义 Hooks（可创建）
+│   └── utils/         # 工具函数（可创建）
+├── _dev/              # 开发工具目录（自动生成，禁止修改）
+└── docs/              # 文档目录（禁止修改）
 ```
 
-详见 [docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)
+## 🚀 开发约束
 
-## 快速要点
+- ✅ **允许**：在 `src/` 目录下创建、修改任何文件
+- ❌ **严禁**：修改项目配置文件（package.json, vite.config.js 等）
+- ❌ **严禁**：修改 `_dev/` 和 `docs/` 目录
 
-### 入口文件
-- 使用 `app.jsx` 作为应用入口
+## 🔧 开发命令
 
-### 样式管理
-- 必须使用 CSS Modules（`.module.css`）
+```bash
+# 安装依赖
+npm install
 
-### 错误处理
-```jsx
-import { reportError } from '@morphixai/lib';
-
-  try {
-    const result = await AppSdk.someModule.someMethod();
-    return result;
-  } catch (error) {
-    await reportError(error, 'JavaScriptError', {
-      component: 'ComponentName',
-    action: 'handleAsyncOperation'
-    });
-    return null;
-  }
+# 启动开发服务器
+npm run dev
 ```
 
 ---
 
-**再次提醒：完整开发规范请阅读 [docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)**
+**完整开发规范请阅读：[docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md)**
+
